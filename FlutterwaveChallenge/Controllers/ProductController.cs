@@ -54,11 +54,11 @@ namespace FlutterwaveChallenge.Controllers
             return Ok(result);
         }
 
-        [Route("GetProductByCategoryName")]
+        [Route("GetProductByCategoryId")]
         [HttpGet]
-        public async Task<ActionResult<Product>> GetProductByCategoryName(string categoryName)
+        public async Task<ActionResult<Product>> GetProductByCategoryName(string catid)
         {
-            var result = await _productRepository.GetProductByCategory(categoryName);
+            var result = await _productRepository.GetProductByCategoryId(catid);
             if (result == null)
             {
                 return NotFound();

@@ -127,7 +127,7 @@ namespace FlutterwaveChallenge.Data
                 new Seller()
                 {
                     Address = "yaba",
-                    CountryName  = "Nigeria" ,
+                    CountryId  = "Nigeria" ,
                     DOB = DateTime.Now,
                     Email = "thpen0411@gmail.com",
                     FirstName = "Abdulateef",
@@ -139,7 +139,7 @@ namespace FlutterwaveChallenge.Data
                  new Seller()
                 {
                     Address = "yaba",
-                    CountryName  = "Nigeria" ,
+                    CountryId  = "Nigeria" ,
                     DOB = DateTime.Now,
                     Email = "thpen04@gmail.com",
                     FirstName = "Abdulateef",
