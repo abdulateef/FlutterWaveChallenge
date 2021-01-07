@@ -1,8 +1,8 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "C:\\Users\\vggtech\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\vggtech\\.nuget\\packages"
+      "/Users/SimpuMind/.dotnet/store/|arch|/|tfm|",
+      "/Users/SimpuMind/.nuget/packages"
     ]
   }
 }

@@ -3,6 +3,7 @@ using FlutterwaveChallenge.Data.Interface;
 using FlutterwaveChallenge.Entities;
 using FlutterwaveChallenge.Repositories.Interface;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -19,16 +20,42 @@ namespace FlutterwaveChallenge.Repositories.Implementation
         {
             _context = catalogContext;
         }
-        public async Task Create(Product product)
+        public async Task<Product> Create(Product product)
         {
-            await _context.Products.InsertOneAsync(product);
-        }
+            try
+            {
+                Product doc = new Product
+                {
+                    Id = ObjectId.GenerateNewId().ToString(),
+                    Name = product.Name,
+                    Category = product.Category,
+                    Description = product.Description,
+                    ImageFile = product.ImageFile,
+                    Price = product.Price,
+                    Summary = product.Summary
 
+                };
+                await _context.Products.InsertOneAsync(doc);
+                return product;
+            }
+            catch (Exception ex)
+            {
+                return new Product();
+            }
+
+        }
         public async Task<bool> Delete(string id)
         {
-            FilterDefinition<Product> filter = Builders<Product>.Filter.Eq(p => p.Id, id);
-            DeleteResult deleResult = await _context.Products.DeleteOneAsync(filter);
-            return deleResult.IsAcknowledged && deleResult.DeletedCount > 0;
+            try
+            {
+                FilterDefinition<Product> filter = Builders<Product>.Filter.Eq(p => p.Id, id);
+                DeleteResult deleResult = await _context.Products.DeleteOneAsync(filter);
+                return deleResult.IsAcknowledged && deleResult.DeletedCount > 0;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public async Task<Product> GetProduct(string id)
@@ -38,13 +65,13 @@ namespace FlutterwaveChallenge.Repositories.Implementation
 
         public async Task<IEnumerable<Product>> GetProductByCategory(string categoryName)
         {
-            FilterDefinition<Product> filter = Builders<Product>.Filter.ElemMatch(p => p.Category, categoryName);
+            FilterDefinition<Product> filter = Builders<Product>.Filter.Eq(p => p.Category, categoryName);
             return await _context.Products.Find(filter).ToListAsync();
         }
 
         public async Task<IEnumerable<Product>> GetProductByName(string name)
         {
-            FilterDefinition<Product> filter = Builders<Product>.Filter.ElemMatch(p => p.Name, name);
+            FilterDefinition<Product> filter = Builders<Product>.Filter.Eq(p => p.Name, name);
             return await _context.Products.Find(filter).ToListAsync();
         }
 
@@ -55,10 +82,17 @@ namespace FlutterwaveChallenge.Repositories.Implementation
 
         public async Task<bool> Update(Product product)
         {
-            var updaterResult = await _context
+            try
+            {
+                var updaterResult = await _context
                 .Products
                 .ReplaceOneAsync(filter: g => g.Id == product.Id, replacement: product);
-            return updaterResult.IsAcknowledged && updaterResult.ModifiedCount > 0;
+                return updaterResult.IsAcknowledged && updaterResult.ModifiedCount > 0;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 

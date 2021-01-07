@@ -72,10 +72,11 @@ namespace FlutterwaveChallenge.Controllers
         }
         [Route("Create")]
         [HttpPost]
-        public async Task<ActionResult<Rider>> Create([FromBody] Category category)
+        public async Task<ActionResult<Category>> Create([FromBody] Category category)
         {
             await _categoryRepository.Create(category);
-            return CreatedAtRoute("Get", new { id = category.Id }, category);
+            var result = await _categoryRepository.GetByName(category.Name);
+            return Ok(result);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace FlutterwaveChallenge.Repositories.Interface
         Task<IEnumerable<Category>> GetAll();
         Task<Category> Get(string id);
         Task<IEnumerable<Category>> GetByName(string name);
-        Task Create(Category category);
+        Task<Category> Create(Category category);
         Task<bool> Update(Category category);
         Task<bool> Delete(string id);
     }

@@ -12,7 +12,7 @@ namespace FlutterwaveChallenge.Repositories.Interface
         Task<Rider> Get(string id);
         Task<IEnumerable<Rider>> GetByCountry(string countryname);
         Task<IEnumerable<Rider>> GetByName(string categoryName);
-        Task Create(Rider rider);
+        Task<Rider> Create(Rider rider);
         Task<bool> Update(Rider rider);
         Task<bool> Delete(string id);
     }

@@ -10,8 +10,8 @@ namespace FlutterwaveChallenge.Repositories.Interface
     {
         Task<IEnumerable<Country>> GetAll();
         Task<Country> Get(string id);
-        Task<IEnumerable<Country>> GetByName(string name);
-        Task Create(Country country);
+        Task<Country> GetByName(string name);
+        Task<Country> Create(Country country);
         Task<bool> Update(Country country);
         Task<bool> Delete(string id);
     }

@@ -86,7 +86,8 @@ namespace FlutterwaveChallenge.Controllers
         public async Task<ActionResult<Product>> Create([FromBody] Product product)
         {
             await _productRepository.Create(product);
-            return CreatedAtRoute("GetProductById", new { id = product.Id }, product);
+            var result = await _productRepository.GetProductByName(product.Name);
+            return Ok(result);
         }
     }
 }

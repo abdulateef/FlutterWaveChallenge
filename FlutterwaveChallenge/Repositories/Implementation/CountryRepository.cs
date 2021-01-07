@@ -1,6 +1,7 @@
 ﻿using FlutterwaveChallenge.Data.Interface;
 using FlutterwaveChallenge.Entities;
 using FlutterwaveChallenge.Repositories.Interface;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,27 @@ namespace FlutterwaveChallenge.Repositories.Implementation
         {
             _context = databaseContext;
         }
-        public async Task Create(Country country)
+        public async Task<Country> Create(Country country)
         {
-            await _context.Countries.InsertOneAsync(country);
+            try
+            {
+                Country doc = new Country
+                {
+                    Id = ObjectId.GenerateNewId().ToString(),
+                    Name = country.Name,
+                     CallCode = country.CallCode,
+                      Code = country.Code,
+                       Currency = country.Currency
+                };
+                await _context.Countries.InsertOneAsync(doc);
+                return country; 
+            }
+            catch (Exception ex)
+            {
+                return new Country();
+            }
         }
-
+         
         public async Task<bool> Delete(string id)
         {
             FilterDefinition<Country> filter = Builders<Country>.Filter.Eq(p => p.Id, id);
@@ -38,10 +55,10 @@ namespace FlutterwaveChallenge.Repositories.Implementation
             return await _context.Countries.Find(p => true).ToListAsync();
         }
 
-        public async Task<IEnumerable<Country>> GetByName(string name)
+        public async Task<Country> GetByName(string Name)
         {
-            FilterDefinition<Country> filter = Builders<Country>.Filter.ElemMatch(p => p.Name, name);
-            return await _context.Countries.Find(filter).ToListAsync();
+            FilterDefinition<Country> filter = Builders<Country>.Filter.Eq(p => p.Name, Name);
+            return await _context.Countries.Find(filter).FirstOrDefaultAsync();
         }
 
         public async Task<bool> Update(Country country)
@@ -49,7 +66,7 @@ namespace FlutterwaveChallenge.Repositories.Implementation
             var updaterResult = await _context
                                     .Countries
                                     .ReplaceOneAsync(filter: g => g.Id == country.Id, replacement: country);
-            return updaterResult.IsAcknowledged && updaterResult.ModifiedCount > 0;
+            return   updaterResult.IsAcknowledged && updaterResult.ModifiedCount > 0;
         }
     }
 }
