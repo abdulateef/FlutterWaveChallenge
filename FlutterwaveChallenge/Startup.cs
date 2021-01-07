@@ -58,9 +58,16 @@ namespace FlutterwaveChallenge
             }
 
             app.UseHttpsRedirection();
-            app.UseCors(builder =>
-                            builder.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()); app.UseRouting();
-
+            app.UseCors();
+            app.UseCors("Open");
+            //Accept All HTTP Request Methods from all origins
+            app.UseCors(builder => builder
+                                        .AllowAnyHeader()
+                                        .AllowAnyOrigin()
+                                        .AllowAnyMethod()
+                                        .WithOrigins("https://localhost:44372")
+                                        );
+            app.UseRouting();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
