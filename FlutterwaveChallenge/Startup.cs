@@ -58,8 +58,8 @@ namespace FlutterwaveChallenge
             }
 
             app.UseHttpsRedirection();
-
-            app.UseRouting();
+            app.UseCors(builder =>
+                            builder.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()); app.UseRouting();
 
             app.UseAuthorization();
 

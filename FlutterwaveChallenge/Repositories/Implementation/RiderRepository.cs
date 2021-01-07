@@ -13,27 +13,36 @@ namespace FlutterwaveChallenge.Repositories.Implementation
     public class RiderRepository : IRiderRepository
     {
         private readonly IDatabaseContext _context;
-        public RiderRepository(IDatabaseContext databaseContext)
+        private readonly ICountryRepository _countryRepository;
+
+        public RiderRepository(IDatabaseContext databaseContext, ICountryRepository countryRepository)
         {
             _context = databaseContext;
+            _countryRepository = countryRepository;
         }
         public async Task<Rider> Create(Rider rider)
         {
             try
             {
-                Rider doc = new Rider
-                {
-                    Id = ObjectId.GenerateNewId().ToString(),
-                    CallCode = rider.CallCode,
-                    Code = rider.Code,
-                    CountryName = rider.CountryName,
-                    Email = rider.Email,
-                    Name = rider.Name,
-                    PhoneNumber = rider.PhoneNumber
+                var country = await _countryRepository.Get(rider.CountryId);
 
-                };
-                await _context.Riders.InsertOneAsync(doc);
+                if (country != null)
+                {
+                    Rider doc = new Rider
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        CallCode = rider.CallCode,
+                        Code = rider.Code,
+                        CountryId = rider.CountryId,
+                        Email = rider.Email,
+                        Name = rider.Name,
+                        PhoneNumber = rider.PhoneNumber
+
+                    };
+                    await _context.Riders.InsertOneAsync(doc);
+                }
                 return rider;
+
             }
             catch (Exception ex)
             {
@@ -67,7 +76,7 @@ namespace FlutterwaveChallenge.Repositories.Implementation
 
         public async Task<IEnumerable<Rider>> GetByCountry(string countryname)
         {
-            FilterDefinition<Rider> filter = Builders<Rider>.Filter.Eq(p => p.CountryName, countryname);
+            FilterDefinition<Rider> filter = Builders<Rider>.Filter.Eq(p => p.CountryId, countryname);
             return await _context.Riders.Find(filter).ToListAsync();
         }
 

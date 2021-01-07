@@ -11,7 +11,7 @@ namespace FlutterwaveChallenge.Repositories.Interface
         Task<IEnumerable<Product>> GetProducts();
         Task<Product> GetProduct(string id);
         Task<IEnumerable<Product>> GetProductByName(string name);
-        Task<IEnumerable<Product>> GetProductByCategory(string categoryName);
+        Task<IEnumerable<Product>> GetProductByCategoryId(string id);
         Task<Product> Create(Product product);
         Task<bool> Update(Product product);
         Task<bool> Delete(string id);

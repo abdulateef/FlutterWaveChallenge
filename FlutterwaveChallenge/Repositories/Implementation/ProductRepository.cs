@@ -15,28 +15,34 @@ namespace FlutterwaveChallenge.Repositories.Implementation
     public class ProductRepository : IProductRepository
     {
         private readonly IDatabaseContext _context;
-
-        public ProductRepository(IDatabaseContext catalogContext)
+        private readonly ICategoryRepository _categoryRepository;
+        public ProductRepository(IDatabaseContext catalogContext, ICategoryRepository categoryRepository)
         {
             _context = catalogContext;
+            _categoryRepository = categoryRepository;
         }
         public async Task<Product> Create(Product product)
         {
             try
             {
-                Product doc = new Product
+                var category = await _categoryRepository.Get(product.CategoryId);
+                if (category != null)
                 {
-                    Id = ObjectId.GenerateNewId().ToString(),
-                    Name = product.Name,
-                    Category = product.Category,
-                    Description = product.Description,
-                    ImageFile = product.ImageFile,
-                    Price = product.Price,
-                    Summary = product.Summary
+                    Product doc = new Product
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Name = product.Name,
+                        CategoryId = product.CategoryId,
+                        Description = product.Description,
+                        ImageFile = product.ImageFile,
+                        Price = product.Price,
+                        Summary = product.Summary
 
-                };
-                await _context.Products.InsertOneAsync(doc);
+                    };
+                    await _context.Products.InsertOneAsync(doc);
+                }
                 return product;
+
             }
             catch (Exception ex)
             {
@@ -63,9 +69,9 @@ namespace FlutterwaveChallenge.Repositories.Implementation
             return await _context.Products.Find(p => p.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetProductByCategory(string categoryName)
+        public async Task<IEnumerable<Product>> GetProductByCategoryId(string categoryid)
         {
-            FilterDefinition<Product> filter = Builders<Product>.Filter.Eq(p => p.Category, categoryName);
+            FilterDefinition<Product> filter = Builders<Product>.Filter.Eq(p => p.CategoryId, categoryid);
             return await _context.Products.Find(filter).ToListAsync();
         }
 

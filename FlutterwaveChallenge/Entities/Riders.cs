@@ -18,7 +18,7 @@ namespace FlutterwaveChallenge.Entities
         public string Email { get; set; }
 
         public string Code { get; set; }
-        public string CountryName { get; set; }
+        public string CountryId { get; set; }
         public string CallCode { get; set; }
     }
 }

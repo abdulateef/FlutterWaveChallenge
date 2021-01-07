@@ -86,7 +86,7 @@ namespace FlutterwaveChallenge.Data
                 new Product()
                 {
                     Name = "Iphone x",
-                    Category = "Smart Phone",
+                    CategoryId = "Smart Phone",
                     Description = "nice smart phone",
                     ImageFile = "product-4.png",
                     Price = 1000,
@@ -95,7 +95,7 @@ namespace FlutterwaveChallenge.Data
                  new Product()
                 {
                     Name = "Iphone x",
-                    Category = "Smart Phone",
+                    CategoryId = "Smart Phone",
                     Description = "nice smart phone",
                     ImageFile = "product-4.png",
                     Price = 1000,
@@ -103,7 +103,7 @@ namespace FlutterwaveChallenge.Data
                 }, new Product()
                 {
                     Name = "Iphone x",
-                    Category = "Smart Phone",
+                    CategoryId = "Smart Phone",
                     Description = "nice smart phone",
                     ImageFile = "product-4.png",
                     Price = 1000,
@@ -111,7 +111,7 @@ namespace FlutterwaveChallenge.Data
                 }, new Product()
                 {
                     Name = "Iphone x",
-                    Category = "Smart Phone",
+                    CategoryId = "Smart Phone",
                     Description = "nice smart phone",
                     ImageFile = "product-4.png",
                     Price = 1000,
@@ -158,7 +158,7 @@ namespace FlutterwaveChallenge.Data
                 {
                    CallCode =  "+234",
                    Code =  "1111",
-                   CountryName = "Nigeria",
+                   CountryId = "Nigeria",
                    Email = "thepen0411@gail.com",
                    Name = "Solo Ride",
                    PhoneNumber = "08182367005"

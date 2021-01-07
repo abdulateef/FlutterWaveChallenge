@@ -13,29 +13,36 @@ namespace FlutterwaveChallenge.Repositories.Implementation
     public class SellerRepository : ISellerRepository
     {
         private readonly IDatabaseContext _context;
-        public SellerRepository(IDatabaseContext databaseContext)
+        private readonly ICountryRepository _countryRepository;
+        public SellerRepository(IDatabaseContext databaseContext, ICountryRepository countryRepository)
         {
             _context = databaseContext;
+            _countryRepository = countryRepository;
         }
         public async Task<Seller> Create(Seller seller)
         {
             try
             {
-                Seller doc = new Seller
+                var country = await _countryRepository.Get(seller.CountryId);
+                if (country != null)
                 {
-                    Id = ObjectId.GenerateNewId().ToString(),
-                    Address = seller.Address,
-                    CountryName = seller.CountryName,
-                    DOB = seller.DOB,
-                    Email = seller.Email,
-                    FirstName = seller.FirstName,
-                    PhoneNumber = seller.PhoneNumber,
-                    PostalCode = seller.PostalCode,
-                    ShopName = seller.ShopName
+                    Seller doc = new Seller
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Address = seller.Address,
+                        CountryId = seller.CountryId,
+                        DOB = seller.DOB,
+                        Email = seller.Email,
+                        FirstName = seller.FirstName,
+                        PhoneNumber = seller.PhoneNumber,
+                        PostalCode = seller.PostalCode,
+                        ShopName = seller.ShopName
 
 
-                };
-                await _context.Sellers.InsertOneAsync(doc);
+                    };
+                    await _context.Sellers.InsertOneAsync(doc);
+                }
+
                 return seller;
             }
             catch (Exception ex)
@@ -68,9 +75,9 @@ namespace FlutterwaveChallenge.Repositories.Implementation
             return await _context.Sellers.Find(p => true).ToListAsync();
         }
 
-        public async Task<IEnumerable<Seller>> GetByCountry(string countryname)
+        public async Task<IEnumerable<Seller>> GetByCountry(string countryid)
         {
-            FilterDefinition<Seller> filter = Builders<Seller>.Filter.Eq(p => p.CountryName, countryname);
+            FilterDefinition<Seller> filter = Builders<Seller>.Filter.Eq(p => p.CountryId, countryid);
             return await _context.Sellers.Find(filter).ToListAsync();
         }
 
