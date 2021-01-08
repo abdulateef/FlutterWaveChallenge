@@ -32,6 +32,15 @@ namespace FlutterwaveChallenge
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Open", builder =>
+                {
+                    builder.WithOrigins("https://localhost:44372")
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader().AllowAnyMethod();
+                });
+            });
             services.Configure<Appsetting>(Configuration.GetSection(nameof(Appsetting)));
             services.AddSingleton<IAppsetting>(sp =>
             sp.GetRequiredService<IOptions<Appsetting>>().Value
@@ -65,7 +74,7 @@ namespace FlutterwaveChallenge
                                         .AllowAnyHeader()
                                         .AllowAnyOrigin()
                                         .AllowAnyMethod()
-                                        .WithOrigins("https://localhost:44372")
+                                        .WithOrigins("https://localhost:44353")
                                         );
             app.UseRouting();
             app.UseAuthorization();
